@@ -92,66 +92,66 @@ if [ -f /etc/lsb-release ]; then
 fi
 
 
-  echo
-  echo "Checking for patching configuration...."
-  echo
-  if [ -d "$CRONDIR" ]; then
-    if [ ! -f $CRONDIR/$PATCHCONF ]; then
-      echo "ERROR:  Patching is not configured!!"
-      echo
-      echo "Create the following file:"
-      echo "$CRONDIR/$PATCHCONF"
-      echo
-      exit 2
-    elif [ -x $CRONDIR/$PATCHCONF ]; then
-      echo "OK:  Patching configuration file exists and is executable."
-      echo
-      echo "Check file contents is correct:"
-      /bin/cat $CRONDIR/$PATCHCONF
-      echo
-    else
-      echo "ERROR:  Patching configuration file exists but is not executable!"
-      echo
-      echo "To fix, run:"
-      echo "/bin/chmod +x $CRONDIR/$PATCHCONF"
-      exit 2
-      echo
-    fi
+echo
+echo "Checking for patching configuration...."
+echo
+if [ -d "$CRONDIR" ]; then
+  if [ ! -f $CRONDIR/$PATCHCONF ]; then
+    echo "ERROR:  Patching is not configured!!"
+    echo
+    echo "Create the following file:"
+    echo "$CRONDIR/$PATCHCONF"
+    echo
+    exit 2
+  elif [ -x $CRONDIR/$PATCHCONF ]; then
+    echo "OK:  Patching configuration file exists and is executable."
+    echo
+    echo "Check file contents is correct:"
+    /bin/cat $CRONDIR/$PATCHCONF
+    echo
+  else
+    echo "ERROR:  Patching configuration file exists but is not executable!"
+    echo
+    echo "To fix, run:"
+    echo "/bin/chmod +x $CRONDIR/$PATCHCONF"
+    exit 2
+    echo
   fi
+fi
 
-  echo "Performing Unattended Dry Run"
-  echo
-  STARTTIME=$(/bin/date +%Y-%m-%d" "%H:%M)
-  /usr/bin/unattended-upgrades --dry-run -vvv > $WORKING_DIR/unattended-dry-run-output 2>&1 /dev/null
-  ENDTIME=$(/bin/date +%Y-%m-%d" "%H:%M)
-  awk "/$STARTTIME"/,/"$ENDTIME"/ /var/log/unattended-upgrades/unattended-upgrades.log > "$WORKING_DIR/awk-output" 2>&1 /dev/null
-  echo
-  echo "Checking for errors:"
-  if grep -s "has conffile prompt and needs to be upgraded manually" "$WORKING_DIR/unattended-dry-run-output"
-  then
-    echo "ERROR:  The following packages need to be manually installed:"
-    grep -s "has conffile prompt and needs to be upgraded manually" "$WORKING_DIR/unattended-dry-run-output" | awk '{print $2}' | uniq | tr -d \'\" | tee /tmp/packages-to-install
+echo "Performing Unattended Dry Run"
+echo
+STARTTIME=$(/bin/date +%Y-%m-%d" "%H:%M)
+/usr/bin/unattended-upgrades --dry-run -vvv > $WORKING_DIR/unattended-dry-run-output 2>&1 /dev/null
+ENDTIME=$(/bin/date +%Y-%m-%d" "%H:%M)
+awk "/$STARTTIME"/,/"$ENDTIME"/ /var/log/unattended-upgrades/unattended-upgrades.log > "$WORKING_DIR/awk-output" 2>&1 /dev/null
+echo
+echo "Checking for errors:"
+if grep -s "has conffile prompt and needs to be upgraded manually" "$WORKING_DIR/unattended-dry-run-output"
+then
+  echo "ERROR:  The following packages need to be manually installed:"
+  grep -s "has conffile prompt and needs to be upgraded manually" "$WORKING_DIR/unattended-dry-run-output" | awk '{print $2}' | uniq | tr -d \'\" | tee /tmp/packages-to-install
 
   echo
   echo "To fix, run:"
   echo "apt-get install -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" --only-upgrade $(cat $WORKING_DIR/packages-to-install)"
-  fi
-
-
-  #/bin/cat /tmp/unattended-dry-run-output
-  #echo
-  #echo "Unattended Log Output:"
-  #/bin/cat /tmp/awk-output
-  echo
-
-  if [ "$UBUNTUVER" == "16.04" ]; then
-    echo "Ubuntu version 16.04 detected..."
-    echo "Do 16.04 specific stuff...."
-  elif [ "$UBUNTUVER" == "14.04" ]; then
-    echo "Do 14.04 specific stuff..."
-  elif [ "$UBUNTUVER" == "12.04" ]; then
-    echo "Ubuntu 12.04 detected:  This is EOL!!!"
-  fi
 fi
+
+
+#/bin/cat /tmp/unattended-dry-run-output
+#echo
+#echo "Unattended Log Output:"
+#/bin/cat /tmp/awk-output
+echo
+
+if [ "$UBUNTUVER" == "16.04" ]; then
+  echo "Ubuntu version 16.04 detected..."
+  echo "Do 16.04 specific stuff...."
+elif [ "$UBUNTUVER" == "14.04" ]; then
+  echo "Do 14.04 specific stuff..."
+elif [ "$UBUNTUVER" == "12.04" ]; then
+  echo "Ubuntu 12.04 detected:  This is EOL!!!"
+fi
+
 
 
