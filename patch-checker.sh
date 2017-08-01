@@ -78,18 +78,18 @@ if [ -f /etc/lsb-release ]; then
   if grep -s "Err" $WORKING_DIR/apt-get-update-output | grep -q vmware.com
   then
     echo "Error:  vmware error detected!"
-      if [ -f /etc/apt/sources.list.d/packages_vmware_com_tools_esx_5_1latest_ubuntu.list ]; then
-        echo
-        echo "To fix, run:"
-        echo "mkdir $WORKING_DIR;"
-        echo "mv -v /etc/apt/sources.list.d/packages_vmware_com_tools_esx_5_1latest_ubuntu.list $WORKING_DIR/"
-      else
+    if [ -f /etc/apt/sources.list.d/packages_vmware_com_tools_esx_5_1latest_ubuntu.list ]; then
+      echo
+      echo "To fix, run:"
+      echo "mkdir $WORKING_DIR;"
+      echo "mv -v /etc/apt/sources.list.d/packages_vmware_com_tools_esx_5_1latest_ubuntu.list $WORKING_DIR/"
+    else
         "Unable to find the vmware repository file.  Manually find, backup and remove."
-      fi
+    fi
   else
     echo "OK:  vmware error not detected."
   fi
-
+fi
 
 
   echo
