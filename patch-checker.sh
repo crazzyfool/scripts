@@ -1,7 +1,13 @@
 #!/bin/bash
 #
+# Simple bash script to look for some common issues preventing Ubuntu's
+# unattended-upgrades from completing successfully.
 #
-#
+echo ' ____   __  ____  ___  _  _        ___  _  _  ____  ___  __ _  ____  ____ ';
+echo '(  _ \ / _\(_  _)/ __)/ )( \ ___  / __)/ )( \(  __)/ __)(  / )(  __)(  _ \';
+echo ' ) __//    \ )( ( (__ ) __ ((___)( (__ ) __ ( ) _)( (__  )  (  ) _)  )   /';
+echo '(__)  \_/\_/(__) \___)\_)(_/      \___)\_)(_/(____)\___)(__\_)(____)(__\_)';
+echo '																			';
 
 echo
 echo -n "Provide your username (apike for example), followed by [ENTER]: "
