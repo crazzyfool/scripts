@@ -127,14 +127,14 @@ ENDTIME=$(/bin/date +%Y-%m-%d" "%H:%M)
 awk "/$STARTTIME"/,/"$ENDTIME"/ /var/log/unattended-upgrades/unattended-upgrades.log > "$WORKING_DIR/awk-output" 2>&1 /dev/null
 echo
 echo "Checking for errors:"
-if grep -s "has conffile prompt and needs to be upgraded manually" "$WORKING_DIR/unattended-dry-run-output"
-then
-  echo "ERROR:  The following packages need to be manually installed:"
-  grep -s "has conffile prompt and needs to be upgraded manually" "$WORKING_DIR/unattended-dry-run-output" | awk '{print $2}' | uniq | tr -d \'\" | tee /tmp/packages-to-install
+if grep -s "has conffile prompt and needs to be upgraded manually" "$WORKING_DIR/unattended-dry-run-output" > /dev/null
+  then
+    echo "ERROR:  The following packages need to be manually installed:"
+    grep -s "has conffile prompt and needs to be upgraded manually" "$WORKING_DIR/unattended-dry-run-output" | awk '{print $2}' | uniq | tr -d \'\" | tee /tmp/packages-to-install
 
-  echo
-  echo "To fix, run:"
-  echo "apt-get install -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" --only-upgrade $(cat $WORKING_DIR/packages-to-install)"
+    echo
+    echo "To fix, run:"
+    echo "apt-get install -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" --only-upgrade $(cat $WORKING_DIR/packages-to-install)"
 fi
 
 
