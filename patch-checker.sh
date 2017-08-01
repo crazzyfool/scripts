@@ -59,9 +59,7 @@ else
   exit 0
 fi
 
-echo
-echo "PATCHING CHECKER"
-echo
+
 
 if [ -f /etc/redhat-release ]; then
   echo "This is a Redhat/CentOS device and is currently not supported by this script"
@@ -126,7 +124,7 @@ if [ -f /etc/lsb-release ]; then
   STARTTIME=$(/bin/date +%Y-%m-%d" "%H:%M)
   /usr/bin/unattended-upgrades --dry-run -vvv > $WORKING_DIR/unattended-dry-run-output 2>&1 /dev/null
   ENDTIME=$(/bin/date +%Y-%m-%d" "%H:%M)
-  awk "/$STARTTIME"/,/"$ENDTIME"/ /var/log/unattended-upgrades/unattended-upgrades.log > "$WORKING_DIR/awk-output"
+  awk "/$STARTTIME"/,/"$ENDTIME"/ /var/log/unattended-upgrades/unattended-upgrades.log > "$WORKING_DIR/awk-output" 2>&1 /dev/null
   echo
   echo "Checking for errors:"
   if grep -s "has conffile prompt and needs to be upgraded manually" "$WORKING_DIR/unattended-dry-run-output"
