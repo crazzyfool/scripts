@@ -30,19 +30,63 @@ while getopts u:t: option; do
   esac
 done
 
+# take input and trim leading and trailing white space
+trim_white_space() {
+  # trim space from input and return
+  echo "$(echo -e "${1}" | tr -d '[:space:]')"
+}
+
+validateUsername() {
+  # trim space from input
+  var="$(trim_white_space "$1")"
+  echo "var:$var"
+
+  #echo "Validated user: " awk '{$1=$1;print}'
+  #echo "Valudate user: " $(awk '{$1=$1};1')
+  if [[ ! -z "$var" ]] && [[ "$var" =~ ^[A-Za-z]+$ ]]; then
+    echo "not null and only contains letters!"
+    echo "Username=$var"
+  else
+    echo "null or contains numbers:"
+    echo "Username=$var"
+  fi
+}
+
+#validateTicket() {
+#
+#}
+
+validateUsername " a1ndy "
+
+getPidData() {
+  if [ ! -f $PID ]; then
+    echo "PID not found"
+    exit 1
+  else
+    read -r firstline<$PID
+    OPTS=$(echo $firstline | tr ":" " ")
+    echo "OPTS: $OPTS"
+    for i in $OPTS; do
+      echo $i
+    done
+  fi
+}
+
+
 if [ -f $PID ]; then
   echo "PID found! Checking for data...."
-  read -r firstline<$PID
-  echo $firstline
-  echo $firstline | tr ":" " "
-  if [ ! -z $firstline ] && [ $(echo $firstline | tr ":" " " | wc) -le 2 ]; then
+  getPidData
+  #read -r firstline<$PID
+  #OPTS=$(echo $firstline | tr ":" " ")
+  #echo "OPTS: $OPTS"
+  #echo "firstline: $firstline"
+  #echo $(echo $firstline | tr ":" " ")
+  if [ ! -z "$OPTS" ] && [ $($OPT | wc -w) -le 2 ]; then
     echo "yay"
   fi
-  
 else
   echo "PID not found, checking to see if parameters were passed....."
 fi
-
 
 
 
