@@ -17,10 +17,10 @@ unset TICKET
 
 while getopts u:t: option; do
   case ${option} in
-    u | --username)
+    u )
       USERNAME=${OPTARG}
       ;;
-    t | --ticket)
+    t )
       TICKET=${OPTARG}
       ;;
     *)
@@ -30,33 +30,46 @@ while getopts u:t: option; do
   esac
 done
 
-# take input and trim leading and trailing white space
+# takes input and returns with trimmed leading and trailing white space
 trim_white_space() {
   # trim space from input and return
   echo "$(echo -e "${1}" | tr -d '[:space:]')"
 }
 
+
 validateUsername() {
   # trim space from input
-  var="$(trim_white_space "$1")"
-  echo "var:$var"
+  TRIMMED_NAME="$(trim_white_space "$1")"
 
-  #echo "Validated user: " awk '{$1=$1;print}'
-  #echo "Valudate user: " $(awk '{$1=$1};1')
-  if [[ ! -z "$var" ]] && [[ "$var" =~ ^[A-Za-z]+$ ]]; then
-    echo "not null and only contains letters!"
-    echo "Username=$var"
+  # if input is not null
+  if [[ ! -z "$TRIMMED_NAME" ]] && [[ "$TRIMMED_NAME" =~ ^[A-Za-z]+$ ]]; then
+    #echo "not null and only contains letters!"
+    #echo "Username=$TRIMMED_NAME"
+    return 0
+  # if input is null
   else
-    echo "null or contains numbers:"
-    echo "Username=$var"
+    #echo "null or contains numbers:"
+    #echo "Username=$TRIMMED_NAME"
+    return 2
   fi
 }
 
-#validateTicket() {
-#
-#}
+#echo "validateUsername test:"
+#echo " ap1ike "
+#validateUsername " ap1ike "
+#echo "(null)"
+#validateUsername ""
 
-validateUsername " a1ndy "
+
+if [[ "$(validateUsername '')" -eq 2 ]]; then
+  echo "Success!"
+elif [[ "$(validateUsername '')" -eq 0 ]]; then
+  echo "Failed!"
+else
+  echo "Not sure what would cause this!!"
+fi
+  
+
 
 getPidData() {
   if [ ! -f $PID ]; then
@@ -114,136 +127,6 @@ fi
 
 
 #echo $USERNAME-$TICKET
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
